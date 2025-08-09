@@ -5,6 +5,7 @@ import auth from "../firebase/firebase.init"
 export const authcontex = createContext(null)
 export default function AuthProvider({ children }) {
   const [user, setuser] = useState(null)
+  const [loading, setloading] = useState(true)
   console.log(user)
   const emailSignUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password)
@@ -40,6 +41,8 @@ export default function AuthProvider({ children }) {
     emailLogin,
     UserUpdateProfile,
     signOutUser,
+    loading,
+    setloading,
   }
 
   return (
