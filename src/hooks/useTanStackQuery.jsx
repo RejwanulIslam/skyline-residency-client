@@ -1,0 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
+import useAxiosPublick from './useAxiosPublick'
+
+export default function useTanStackQuery(path, queryKey) {
+  const axiosPublick=useAxiosPublick()
+  const { data } = useQuery({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const res = await axiosPublick.get(path)
+      return res.data
+    }
+  })
+  return data
+}

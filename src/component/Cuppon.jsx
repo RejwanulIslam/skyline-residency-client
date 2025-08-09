@@ -1,15 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
-import useAxiosPublick from '../hooks/useAxiosPublick'
+import useTanStackQuery from '../hooks/useTanStackQuery'
 
 export default function Cuppon() {
-    const axiosPublick = useAxiosPublick()
-    const { data } = useQuery({
-        queryKey: ['cuppon'],
-        queryFn: async () => {
-            const res = await axiosPublick.get('/cuppon')
-            return res.data
-        }
-    })
+  
+    const data=useTanStackQuery('/cuppon','cuppon')
     console.log(data)
     return (
         <div className='grid grid-cols-3 gap-5'>
