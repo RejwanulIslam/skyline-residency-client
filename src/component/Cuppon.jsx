@@ -1,8 +1,8 @@
 import useTanStackQuery from '../hooks/useTanStackQuery'
 
 export default function Cuppon() {
-  
-    const data=useTanStackQuery('/cuppon','cuppon')
+
+    const data = useTanStackQuery('/cuppon', 'cuppon')
     console.log(data)
     return (
         <div className='grid grid-cols-3 gap-5'>
