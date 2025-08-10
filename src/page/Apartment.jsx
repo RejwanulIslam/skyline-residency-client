@@ -6,7 +6,7 @@ export default function Apartment() {
   return (
     <div className='grid grid-cols-2 gap-5 '>
         {
-            data.map(apartment=>(<div className="bg-white shadow-lg rounded-lg overflow-hidden">
+            data?.map(apartment=>(<div className="bg-white shadow-lg rounded-lg overflow-hidden">
       <img
         className="w-full h-48 object-cover"
         src={apartment.image}
