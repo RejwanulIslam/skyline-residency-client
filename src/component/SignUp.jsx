@@ -1,9 +1,12 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import useAuth from '../hooks/useAuth'
+import useAxiosSecure from '../hooks/useAxiosSecure'
 
 export default function SignUp() {
-    const { emailSignUp,UserUpdateProfile } = useAuth()
+    const { emailSignUp, UserUpdateProfile } = useAuth()
+    const axiosSecure = useAxiosSecure()
+    const { user } = useAuth()
     const {
         register,
         handleSubmit,
@@ -13,9 +16,18 @@ export default function SignUp() {
 
     const onSubmit = (data) => {
         emailSignUp(data.email, data.password)
-        .then(res=>{
-            UserUpdateProfile(data.name,data.photo)
-        })
+            .then(res => {
+                UserUpdateProfile(data.name, data.photo)
+                    .then(async () => {
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email,
+                            role: 'user'
+                        }
+                        const { data: resData } = await axiosSecure.post('/user', userInfo)
+                        console.log(resData)
+                    })
+            })
     }
     return (
         <div className=''>

@@ -5,6 +5,8 @@ import Home from "../page/Home";
 import SignUp from "../component/SignUp";
 import Login from "../component/Login";
 import Apartment from "../page/Apartment";
+import UserDashboard from "../dashboard/userDashboard/UserDashboard";
+import AdminDashboard from "../dashboard/adminDashboard/AdminDashboard";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -25,6 +27,14 @@ const router=createBrowserRouter([
             {
                 path:'/apartment',
                 element: <Apartment></Apartment>
+            },
+            {
+                path:'/userDashboard',
+                element: <UserDashboard></UserDashboard>
+            },
+            {
+                path:'/adminDashboard',
+                element: <AdminDashboard></AdminDashboard>
             },
         ]
     }

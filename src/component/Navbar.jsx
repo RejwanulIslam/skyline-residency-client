@@ -1,8 +1,14 @@
 import { NavLink } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
+import useTanStackQuery from '../hooks/useTanStackQuery'
+import userRole from '../hooks/userRole'
 
 export default function Navbar() {
     const { user, signOutUser } = useAuth()
+    const { role } = userRole()
+    console.log(role)
+    const userData = useTanStackQuery('/user', 'user')
+    console.log(userData)
     const item = <>
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/apartment">Apartment</NavLink></li>
@@ -36,8 +42,18 @@ export default function Navbar() {
                         user && <div className="dropdown dropdown-bottom dropdown-end">
                             <label tabIndex={0}> <img className='btn btn-circle h-16 w-16 rounded-full' src={user?.photoURL}></img></label>
                             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                <li>
+
+
+                                    {role == 'user' && <NavLink to="/userDashboard">User Dashbard</NavLink>
+                                    }
+                                    {role == 'admin' && <NavLink to="/adminDashboard">Admin Dashbard</NavLink>
+                                    }
+
+
+                                </li>
                                 <li><button onClick={() => signOutUser()}>Logout</button></li>
-                                <li><a>Item 2</a></li>
+
                             </ul>
                         </div>
                     }
