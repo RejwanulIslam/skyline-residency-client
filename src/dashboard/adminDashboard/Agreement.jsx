@@ -1,7 +1,16 @@
+import useAxiosSecure from '../../hooks/useAxiosSecure'
 import useTanStackQuery from '../../hooks/useTanStackQuery'
-
 export default function Agreement() {
-    const agreement = useTanStackQuery('/agreement', 'agreement')
+    const { data, refetch } = useTanStackQuery('/agreement', 'agreement')
+    const { data: userData, refetch: userRefetch } = useTanStackQuery('/user', 'user')
+    const axiosSecure = useAxiosSecure()
+    const acceptAgreement = async (user) => {
+        console.log(user)
+        const { data } = await axiosSecure.patch(`/user?useremail=${user?.email}&agreementId=${user?._id}`)
+        refetch()
+        console.log(data)
+
+    }
 
     return (
         <div className="container mx-auto p-4">
@@ -17,11 +26,12 @@ export default function Agreement() {
                             <th className="py-2 px-4 border">Room No</th>
                             <th className="py-2 px-4 border">Rent</th>
                             <th className="py-2 px-4 border">Request Date</th>
+                            <th className="py-2 px-4 border">Status</th>
                             <th className="py-2 px-4 border">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {agreement?.map(item => (<tr className="hover:bg-gray-50">
+                        {data?.map(item => (<tr className="hover:bg-gray-50">
                             <td className="py-2 px-4 border">{item?.name}</td>
                             <td className="py-2 px-4 border">{item?.email}</td>
                             <td className="py-2 px-4 border">{item?.floorNo}</td>
@@ -29,9 +39,11 @@ export default function Agreement() {
                             <td className="py-2 px-4 border">{item?.apartmentNo}</td>
                             <td className="py-2 px-4 border">${item?.rent}</td>
                             <td className="py-2 px-4 border">{item?.date}</td>
+                            <td className="py-2 px-4 border">{item?.status}</td>
                             <td className="py-2 px-4 border flex space-x-2">
-                                <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Accept</button>
-                                <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
+                                <button onClick={() => acceptAgreement(item)} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" disabled={item?.status === "checked"}>Accept</button>
+
+                                <button  disabled={item?.status === "checked"}  className="bg-red-500  text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
                             </td>
                         </tr>
                         ))}

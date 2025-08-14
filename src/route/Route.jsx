@@ -7,6 +7,7 @@ import Login from "../component/Login";
 import Apartment from "../page/Apartment";
 import UserDashboard from "../dashboard/userDashboard/UserDashboard";
 import AdminDashboard from "../dashboard/adminDashboard/AdminDashboard";
+import Agreement from "../dashboard/adminDashboard/Agreement";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -32,9 +33,17 @@ const router=createBrowserRouter([
                 path:'/userDashboard',
                 element: <UserDashboard></UserDashboard>
             },
+
+            // AdminDashboard
             {
                 path:'/adminDashboard',
-                element: <AdminDashboard></AdminDashboard>
+                element: <AdminDashboard></AdminDashboard>,
+                children:[
+                    {
+                        path:'/adminDashboard/agreement',
+                        element:<Agreement></Agreement>
+                    }
+                ]
             },
         ]
     }

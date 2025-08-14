@@ -3,7 +3,7 @@ import useAxiosSecure from '../hooks/useAxiosSecure'
 import useTanStackQuery from '../hooks/useTanStackQuery'
 
 export default function Apartment() {
-    const data= useTanStackQuery('/apartment','apartment')
+    const {data,refetch}= useTanStackQuery('/apartment','apartment')
     const axiosSecure=useAxiosSecure()
     const {user}=useAuth()
 
