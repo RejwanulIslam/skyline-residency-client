@@ -49,6 +49,8 @@ export default function Navbar() {
                                     }
                                     {role == 'admin' && <NavLink to="/adminDashboard">Admin Dashbard</NavLink>
                                     }
+                                    {role == 'member' && <NavLink to="/memberDashboard">Member Dashbard</NavLink>
+                                    }
 
 
                                 </li>
