@@ -8,6 +8,7 @@ import Apartment from "../page/Apartment";
 import UserDashboard from "../dashboard/userDashboard/UserDashboard";
 import AdminDashboard from "../dashboard/adminDashboard/AdminDashboard";
 import Agreement from "../dashboard/adminDashboard/Agreement";
+import ManageMembers from "../dashboard/adminDashboard/ManageMembers";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -42,6 +43,10 @@ const router=createBrowserRouter([
                     {
                         path:'/adminDashboard/agreement',
                         element:<Agreement></Agreement>
+                    },
+                    {
+                        path:'/adminDashboard/manageMembers',
+                        element:<ManageMembers></ManageMembers>
                     }
                 ]
             },

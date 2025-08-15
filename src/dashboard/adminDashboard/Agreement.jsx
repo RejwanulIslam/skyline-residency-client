@@ -41,7 +41,7 @@ export default function Agreement() {
                             <td className="py-2 px-4 border">{item?.date}</td>
                             <td className="py-2 px-4 border">{item?.status}</td>
                             <td className="py-2 px-4 border flex space-x-2">
-                                <button onClick={() => acceptAgreement(item)} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600" disabled={item?.status === "checked"}>Accept</button>
+                                <button onClick={() => acceptAgreement(item)} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Accept</button>
 
                                 <button  disabled={item?.status === "checked"}  className="bg-red-500  text-white px-3 py-1 rounded hover:bg-red-600">Reject</button>
                             </td>

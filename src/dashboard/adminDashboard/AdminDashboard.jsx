@@ -12,7 +12,7 @@ export default function AdminDashboard() {
                 <div className="w-64  bg-white shadow-sm p-4 space-y-2">
                     <nav className="space-y-2">
                         <NavLink to="/" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">👤 Admin Profile</NavLink>
-                        <NavLink to="/" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">👥 Manage Members</NavLink>
+                        <NavLink to="/adminDashboard/manageMembers" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">👥 Manage Members</NavLink>
                         <NavLink to="/" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">📢 Make Announcement</NavLink>
                         <NavLink to="/adminDashboard/agreement" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">📄 Agreement Requests</NavLink>
                         <NavLink to="/" className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium">🎟️ Manage Coupons</NavLink>
