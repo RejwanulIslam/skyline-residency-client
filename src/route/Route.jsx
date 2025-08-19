@@ -11,6 +11,7 @@ import Agreement from "../dashboard/adminDashboard/Agreement";
 import ManageMembers from "../dashboard/adminDashboard/ManageMembers";
 import MemberDashboard from "../dashboard/memberDashboard/MemberDashboard";
 import MemberProfile from "../dashboard/memberDashboard/MemberProfile";
+import Payment from "../dashboard/memberDashboard/payment/Payment";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -61,7 +62,11 @@ const router=createBrowserRouter([
                     {
                         path:'/memberDashboard/memberProfile',
                         element:<MemberProfile></MemberProfile>
-                    }
+                    },
+                    {
+                        path:'/memberDashboard/payment',
+                        element:<Payment></Payment>
+                    },
                 ]
             }
         ]
