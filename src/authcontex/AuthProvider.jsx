@@ -7,7 +7,8 @@ export const authcontex = createContext(null)
 export default function AuthProvider({ children }) {
   const [user, setuser] = useState(null)
   const [loading, setloading] = useState(true)
-  const axiosPublick=useAxiosPublick()
+  const [seletMonth, setseletMonth] = useState('')
+  const axiosPublick = useAxiosPublick()
   console.log(user)
   const emailSignUp = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password)
@@ -27,23 +28,23 @@ export default function AuthProvider({ children }) {
     return signOut(auth)
   }
   useEffect(() => {
-    const unSuscribe = onAuthStateChanged(auth, async(user) => {
+    const unSuscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setuser(user)
-        const userInfo={email:user?.email}
-      const {data}=await axiosPublick.post('/jwt',userInfo)
-      
-      if(data.token){
-        localStorage.setItem('access-token',data.token)
-        console.log('access-token',data.token)
-        console.log('access-get-token',localStorage.getItem('access-token',data.token))
-      }
+        const userInfo = { email: user?.email }
+        const { data } = await axiosPublick.post('/jwt', userInfo)
+
+        if (data.token) {
+          localStorage.setItem('access-token', data.token)
+          console.log('access-token', data.token)
+          console.log('access-get-token', localStorage.getItem('access-token', data.token))
+        }
 
       }
-      else{
+      else {
         setuser(null)
         localStorage.removeItem('access-token')
-      } 
+      }
     })
     return () => unSuscribe()
   }, [axiosPublick])
@@ -55,6 +56,8 @@ export default function AuthProvider({ children }) {
     signOutUser,
     loading,
     setloading,
+    seletMonth,
+    setseletMonth,
   }
 
   return (

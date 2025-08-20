@@ -3,12 +3,12 @@ import useAxiosPublick from './useAxiosPublick'
 
 export default function useTanStackQuery(path, queryKey) {
   const axiosPublick=useAxiosPublick()
-  const { data,refetch,isPending } = useQuery({
+  const { data,refetch,isPending,isLoading } = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       const res = await axiosPublick.get(path)
       return res.data
     }
   })
-  return {data,refetch,isPending}
+  return {data,refetch,isPending,isLoading}
 }

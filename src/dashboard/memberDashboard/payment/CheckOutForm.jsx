@@ -1,95 +1,159 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import useAxiosSecure from '../../../hooks/useAxiosSecure'
 import useAuth from '../../../hooks/useAuth'
+import useTanStackQuery from '../../../hooks/useTanStackQuery'
 
 export default function CheckOutForm() {
   const stripe = useStripe()
-  const {user}=useAuth()
+  const { user, seletMonth } = useAuth()
+
+  console.log(seletMonth)
   const elements = useElements()
-  const [clientSecret,setClientSecret]=useState('')
-  const [transationId,settransationId]=useState('')
-  const [error,seterror]=useState('')
   const axiosSecure = useAxiosSecure()
-  const totalPrice = 1000
+
+  const [clientSecret, setClientSecret] = useState('')
+  const [transationId, settransationId] = useState('')
+  const [error, seterror] = useState('')
+  const [cupponMassage, setcupponMassage] = useState('')
+  const [cuppon, setcuppon] = useState(0)
+
+  const { data: cupponData, refetch } = useTanStackQuery('/cuppon', 'cuppon')
+  console.log(cupponData)
+  console.log(cupponMassage)
+  const chackCuppon = () => {
+    setcuppon('')
+    const findCuppon = cupponData.find(item => item.code == cupponMassage)
+    if(findCuppon){
+      setcuppon(findCuppon?.discount)
+
+    }
+
+  }
+        console.log(cuppon)
+
+
+  const { data } = useTanStackQuery('/agreement', 'agreement')
+  const agreementData = data?.find(data => data?.email == user?.email)
+  console.log(agreementData)
+  let totalPrice=0
+
+  if(cuppon){
+   const discount=agreementData?.rent*parseInt(cuppon)/100
+     totalPrice=agreementData?.rent-discount
+  }
+  if(!cuppon){
+   totalPrice = agreementData?.rent
+  }
+    console.log(totalPrice)
+
+
+
   useEffect(() => {
-    axiosSecure.post('/create-payment-intent',{totalPrice})
-    .then(res=>{
-      setClientSecret(res.data.clientSecret)
-      console.log(res.data.clientSecret)
-    })
-  }, [axiosSecure,totalPrice])
+    axiosSecure.post('/create-payment-intent', { totalPrice })
+      .then(res => {
+        setClientSecret(res.data.clientSecret)
+        console.log(res.data.clientSecret)
+      })
+  }, [axiosSecure, totalPrice])
   const handleSubmit = async (e) => {
 
-    if(!stripe||!elements){
+    if (!stripe || !elements) {
       return
     }
     e.preventDefault()
     const card = elements.getElement(CardElement)
-     if(card==null){
+    if (card == null) {
       return
     }
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card
     })
-    if(error){
+    if (error) {
       seterror(error.message)
-    }else{
+    } else {
       seterror('')
     }
     console.log(paymentMethod)
-   
+
 
     //confarm payment
-    const {paymentIntent, error:confirmerror}= await stripe.confirmCardPayment(clientSecret,{
-      payment_method:{
-        card:card,
-        billing_details:{
-          name:user?.displayName||'abcd',
-          email:user?.email||'abcd@gmail.com'
+    const { paymentIntent, error: confirmerror } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: card,
+        billing_details: {
+          name: user?.displayName || 'abcd',
+          email: user?.email || 'abcd@gmail.com'
         }
       }
-      
+
     })
-    if(confirmerror){
+    if (confirmerror) {
       console.log(confirmerror)
       seterror(confirmerror.message)
-    }else{
+    } else {
       seterror('')
-      if(paymentIntent.status="succeeded"){
-       settransationId(paymentIntent.id)
+      if (paymentIntent.status == "succeeded") {
+        settransationId(paymentIntent.id)
+        const paymentData = {
+          user_Email: user?.email,
+          month: seletMonth,
+          floor_No: agreementData?.floorNo,
+          block_Name: agreementData?.blockName,
+          apartment_No: agreementData?.apartmentNo,
+          rent: totalPrice,
+          transation_Id: paymentIntent?.id,
+          date: new Date()
+
+        }
+        console.log(paymentData)
+        const { data } = await axiosSecure.post('/paymentHistory', paymentData)
+        console.log(data)
       }
     }
 
-console.log(confirmerror)
-console.log(paymentIntent)
+    console.log(confirmerror)
+    console.log(paymentIntent)
   }
   return (
-    <div className='w-1/2'>
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
-              },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
-          },
-        }}
-      />
-      <button className='font-semibold' type="submit" disabled={!stripe}>
-        Pay
-      </button>
-      <p className='text-green-500'>{transationId}</p>
-      <p className='text-red-500'>{error}</p>
-    </form>
+    <div className=''>
+
+      <form onSubmit={handleSubmit}>
+        <div className='flex gap-3'>
+          <div className='w-[300px]'>
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                  invalid: {
+                    color: '#9e2146',
+                  },
+                },
+              }}
+            />
+          </div>
+          <div className='w-5'>
+            <button className='btn bg-green-400 font-bold' type="submit" disabled={!stripe}>
+              Pay
+            </button>
+          </div>
+
+        </div>
+
+      </form>
+
+      <input type="text" onChange={(e)=>setcupponMassage(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
+      <button onClick={chackCuppon}>Apply</button>
+
+      {transationId && <p className='text-green-500 text-left'> <span className='font-semibold text-black'>transationId:</span> {transationId}</p>}
+      <p className='text-red-500 text-left'>{error}</p>
     </div>
   )
 }
