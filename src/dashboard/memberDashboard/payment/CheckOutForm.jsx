@@ -15,37 +15,52 @@ export default function CheckOutForm() {
   const [clientSecret, setClientSecret] = useState('')
   const [transationId, settransationId] = useState('')
   const [error, seterror] = useState('')
+  const [cupponCode, setcupponCode] = useState('')
   const [cupponMassage, setcupponMassage] = useState('')
+  const [totalPrice, settotalPrice] = useState(0)
   const [cuppon, setcuppon] = useState(0)
 
   const { data: cupponData, refetch } = useTanStackQuery('/cuppon', 'cuppon')
   console.log(cupponData)
-  console.log(cupponMassage)
+  console.log(cupponCode)
   const chackCuppon = () => {
-    setcuppon('')
-    const findCuppon = cupponData.find(item => item.code == cupponMassage)
-    if(findCuppon){
+    setcuppon(0)
+    setcupponMassage('')
+    const findCuppon =  cupponData.find(item => item.code == cupponCode)
+    if (findCuppon) {
       setcuppon(findCuppon?.discount)
+    setcupponMassage(`Congatulation You Discount${parseInt(findCuppon?.discount)}% `)
+
+    }
+   if (!findCuppon){
+    setcupponMassage('Your Cuppon is Invalid')
 
     }
 
   }
-        console.log(cuppon)
+  console.log(cuppon)
 
 
   const { data } = useTanStackQuery('/agreement', 'agreement')
   const agreementData = data?.find(data => data?.email == user?.email)
   console.log(agreementData)
-  let totalPrice=0
+  
+  
+  useEffect(() => {
+    if (cuppon) {
+      const discount = agreementData?.rent * parseInt(cuppon) / 100
+      const Price = agreementData?.rent - discount
+      settotalPrice(Price)
 
-  if(cuppon){
-   const discount=agreementData?.rent*parseInt(cuppon)/100
-     totalPrice=agreementData?.rent-discount
-  }
-  if(!cuppon){
-   totalPrice = agreementData?.rent
-  }
-    console.log(totalPrice)
+    }
+    if (!cuppon) {
+      const Price = agreementData?.rent
+      settotalPrice(Price)
+    }
+
+  }, [cuppon, agreementData])
+
+  console.log(totalPrice)
 
 
 
@@ -149,8 +164,9 @@ export default function CheckOutForm() {
 
       </form>
 
-      <input type="text" onChange={(e)=>setcupponMassage(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
-      <button onClick={chackCuppon}>Apply</button>
+      <input type="text" onChange={(e) => setcupponCode(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
+      <button onClick={() => { chackCuppon() }}>Apply</button>
+      <p>{cupponMassage}</p>
 
       {transationId && <p className='text-green-500 text-left'> <span className='font-semibold text-black'>transationId:</span> {transationId}</p>}
       <p className='text-red-500 text-left'>{error}</p>
