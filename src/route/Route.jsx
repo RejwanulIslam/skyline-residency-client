@@ -16,6 +16,7 @@ import MakePayment from "../dashboard/memberDashboard/MakePayment";
 import PaymentHistory from "../dashboard/memberDashboard/PaymentHistory";
 import PrivectRoute from "./PrivectRoute";
 import AdminRoute from "./AdminRoute";
+import MemberRoute from "./MemberRoute";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -61,7 +62,7 @@ const router=createBrowserRouter([
             //member Dashboard
             {
                 path:'/memberDashboard',
-                element:<PrivectRoute><MemberDashboard></MemberDashboard></PrivectRoute>,
+                element:<PrivectRoute><MemberRoute> <MemberDashboard></MemberDashboard></MemberRoute></PrivectRoute>,
                 children:[
                     {
                         path:'/memberDashboard/memberProfile',
