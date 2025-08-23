@@ -39,12 +39,14 @@ export default function AuthProvider({ children }) {
           console.log('access-token', data.token)
           console.log('access-get-token', localStorage.getItem('access-token', data.token))
         }
-
       }
       else {
         setuser(null)
         localStorage.removeItem('access-token')
+
       }
+      setloading(false)
+
     })
     return () => unSuscribe()
   }, [axiosPublick])

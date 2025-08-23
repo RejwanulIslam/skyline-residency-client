@@ -15,7 +15,6 @@ export default function Apartment() {
   const [loading, setloading] = useState(false)
   const [currentpage, setcurrentpage] = useState(0)
   const [itemPerPage, setitemPerPage] = useState(6)
-  const [appartmentData, setappartmentData] = useState([])
   const { data: productCount } = useTanStackQuery('/productCount', 'productCount')
   useEffect(() => {
     if (productCount) {

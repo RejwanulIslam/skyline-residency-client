@@ -4,7 +4,7 @@ import useTanStackQuery from '../hooks/useTanStackQuery'
 import userRole from '../hooks/userRole'
 
 export default function Navbar() {
-    const { user, signOutUser } = useAuth()
+    const { user, signOutUser, loading } = useAuth()
     const { role } = userRole()
     console.log(role)
     const userData = useTanStackQuery('/user', 'user')
@@ -15,6 +15,7 @@ export default function Navbar() {
         <li><NavLink to="/signup">Sign UP</NavLink></li>
         <li><NavLink to="/login">Login</NavLink></li>
     </>
+    //if(loading) return <p>Loading...</p>
     return (
         <div>
             <div className="navbar bg-base-100">

@@ -12,9 +12,9 @@ import ManageMembers from "../dashboard/adminDashboard/ManageMembers";
 import MemberDashboard from "../dashboard/memberDashboard/MemberDashboard";
 import MemberProfile from "../dashboard/memberDashboard/MemberProfile";
 import Payment from "../dashboard/memberDashboard/payment/Payment";
-import MakePaymentProvider from "../dashboard/memberDashboard/MakePayment";
 import MakePayment from "../dashboard/memberDashboard/MakePayment";
 import PaymentHistory from "../dashboard/memberDashboard/PaymentHistory";
+import PrivectRoute from "./PrivectRoute";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -38,13 +38,13 @@ const router=createBrowserRouter([
             },
             {
                 path:'/userDashboard',
-                element: <UserDashboard></UserDashboard>
+                element:<PrivectRoute> <UserDashboard></UserDashboard></PrivectRoute>
             },
 
             // AdminDashboard
             {
                 path:'/adminDashboard',
-                element: <AdminDashboard></AdminDashboard>,
+                element: <PrivectRoute> <AdminDashboard></AdminDashboard></PrivectRoute>,
                 children:[
                     {
                         path:'/adminDashboard/agreement',
@@ -60,7 +60,7 @@ const router=createBrowserRouter([
             //member Dashboard
             {
                 path:'/memberDashboard',
-                element:<MemberDashboard></MemberDashboard>,
+                element:<PrivectRoute><MemberDashboard></MemberDashboard></PrivectRoute>,
                 children:[
                     {
                         path:'/memberDashboard/memberProfile',
