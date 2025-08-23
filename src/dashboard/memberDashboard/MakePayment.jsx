@@ -18,7 +18,7 @@ export default function MakePayment() {
             <h2 className="text-2xl font-bold text-center mb-6">Rent Payment Form</h2>
 
             <form className="space-y-4">
-                <div className="flex gap-5">
+                <div className="lg:flex gap-5">
                 {/* Member Email */}
                 <div>
                     <label className="block text-gray-700 font-medium mb-1">
@@ -43,7 +43,7 @@ export default function MakePayment() {
                     />
                 </div>
                 </div>
-                     <div className="flex gap-5">
+                     <div className="lg:flex gap-5">
                 {/* Block Name */}
                 <div>
                     <label className="block text-gray-700 font-medium mb-1">
@@ -72,7 +72,7 @@ export default function MakePayment() {
                 </div>
                 </div>
                <div>
-                <div className="flex gap-5">
+                <div className="lg:flex gap-5">
                 {/* Rent */}
                 <div>
                     <label className="block text-gray-700 font-medium mb-1">Rent</label>

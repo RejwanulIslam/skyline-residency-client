@@ -11,7 +11,7 @@ export default function PaymentHistory() {
                 Payment History
             </h2>
 
-            <div className="overflow-x-auto overflow-hidden bg-white rounded-2xl shadow-md">
+            <div className="overflow-x-auto max-w-4xl overflow-hidden bg-white rounded-2xl shadow-md">
                 <table className="min-w-full border-collapse">
                     <thead className="bg-gray-100 text-gray-700 sticky top-0">
                         <tr>

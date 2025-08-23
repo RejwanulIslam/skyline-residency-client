@@ -15,12 +15,12 @@ export default function Apartment() {
   const [loading, setloading] = useState(false)
   const [currentpage, setcurrentpage] = useState(0)
   const [itemPerPage, setitemPerPage] = useState(6)
-  const { data: productCount } = useTanStackQuery('/productCount', 'productCount')
+  const { data: apartmentCount } = useTanStackQuery('/apartmentCount', 'apartmentCount')
   useEffect(() => {
-    if (productCount) {
-      setcount(productCount?.result)
+    if (apartmentCount) {
+      setcount(apartmentCount?.result)
     }
-  }, [productCount])
+  }, [apartmentCount])
   console.log(count)
 
 
@@ -38,7 +38,6 @@ export default function Apartment() {
 
     }
   })
-  //}, [axiosPublick, currentpage, itemPerPage])
 
   const handleItemPerPage = (num) => {
     setitemPerPage(num)
@@ -74,7 +73,7 @@ export default function Apartment() {
   }
   return (
     <div>
-      <div className='grid grid-cols-2 gap-5 '>
+      <div className='grid lg:grid-cols-2 gap-5 '>
         {
           isLoading ? <p>loading</p> : data?.map(apartment => (<div key={apartment?._id} className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img

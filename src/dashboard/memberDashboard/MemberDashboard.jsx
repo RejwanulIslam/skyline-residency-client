@@ -41,7 +41,7 @@ export default function MemberDashboard() {
                     </NavLink>
 
                     <NavLink
-                        to="/dashboard/payment-history"
+                        to="/memberDashboard/paymentHistory"
                         className={({ isActive }) =>
                             `flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isActive
                                 ? "bg-indigo-500 text-white shadow-md"
@@ -71,6 +71,7 @@ export default function MemberDashboard() {
             </aside>
 
             {/* Main Content */}
+
             <main className="flex-1 p-6">
                 <Outlet />
             </main>

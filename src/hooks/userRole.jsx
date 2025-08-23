@@ -4,7 +4,8 @@ import { useState } from 'react'
 import useAxiosPublick from './useAxiosPublick'
 
 export default function userRole() {
-    const { user } = useAuth()
+    const { user} = useAuth()
+    const [roalLoading,setroalLoading]=useState(true)
     const [role,setrole]=useState({})
     const axiosPublick = useAxiosPublick()
     useEffect(() => {
@@ -13,7 +14,10 @@ export default function userRole() {
                 console.log(res.data)
                 setrole(res.data)
             })
+           .finally(()=>{
+            setroalLoading(false)
+           })
     }, [user?.email])
 
-    return role;
+    return {role,roalLoading};
 }

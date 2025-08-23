@@ -5,7 +5,7 @@ export default function Cuppon() {
     const {data,refetch} = useTanStackQuery('/cuppon', 'cuppon')
     console.log(data)
     return (
-        <div className='grid grid-cols-3 gap-5'>
+        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
             {
                 data?.map(coupon => (
                     <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">

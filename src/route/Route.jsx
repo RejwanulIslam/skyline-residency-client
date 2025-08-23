@@ -17,6 +17,7 @@ import PaymentHistory from "../dashboard/memberDashboard/PaymentHistory";
 import PrivectRoute from "./PrivectRoute";
 import AdminRoute from "./AdminRoute";
 import MemberRoute from "./MemberRoute";
+import AdminProfile from "../dashboard/adminDashboard/AdminProfile";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -48,6 +49,10 @@ const router=createBrowserRouter([
                 path:'/adminDashboard',
                 element:<PrivectRoute><AdminRoute><AdminDashboard></AdminDashboard></AdminRoute></PrivectRoute>,
                 children:[
+                    {
+                        path:'/adminDashboard/adminProfile',
+                        element:<AdminProfile></AdminProfile>
+                    },
                     {
                         path:'/adminDashboard/agreement',
                         element:<Agreement></Agreement>
