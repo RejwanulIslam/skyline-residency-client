@@ -18,6 +18,7 @@ import PrivectRoute from "./PrivectRoute";
 import AdminRoute from "./AdminRoute";
 import MemberRoute from "./MemberRoute";
 import AdminProfile from "../dashboard/adminDashboard/AdminProfile";
+import ManageCuppon from "../dashboard/adminDashboard/ManageCuppon";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -60,6 +61,10 @@ const router=createBrowserRouter([
                     {
                         path:'/adminDashboard/manageMembers',
                         element:<ManageMembers></ManageMembers>
+                    },
+                    {
+                        path:'/adminDashboard/manageCuppon',
+                        element:<ManageCuppon></ManageCuppon>
                     }
                 ]
             },

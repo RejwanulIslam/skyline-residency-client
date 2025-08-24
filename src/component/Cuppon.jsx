@@ -1,64 +1,77 @@
+import { Link } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
+import useAxiosSecure from '../hooks/useAxiosSecure'
 import useTanStackQuery from '../hooks/useTanStackQuery'
 
 export default function Cuppon() {
-
-    const {data,refetch} = useTanStackQuery('/cuppon', 'cuppon')
+    const {directCuppon, setDirectCuppon}=useAuth()
+    const { data, refetch } = useTanStackQuery('/cuppon', 'cuppon')
     console.log(data)
+    const hotCuppon = data?.filter(item => item.type == 'HOT')
+    const newCuppon = data?.filter(item => item.type == 'NEW')
+    const trendingCuppon = data?.filter(item => item.type == 'TRENDING')
+    console.log(hotCuppon)
+    const handleallCuppon=(code)=>{
+       setDirectCuppon(code)
+       console.log(code)
+    }
+
     return (
-        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
-            {
-                data?.map(coupon => (
-                    <div className="max-w-sm bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
-                        {/* Header */}
-                        <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-4 text-white">
-                            <h2 className="text-xl font-bold">{coupon.title}</h2>
-                            <p className="text-sm">{coupon.building}</p>
+        <div class="bg-gray-100 min-h-screen p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Exclusive Coupons</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {
+                  hotCuppon?.map(item=>  <div class="bg-white shadow-lg rounded-xl p-6 transform hover:scale-105 transition-transform duration-300 relative border-t-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">{item?.cupponCode}</h3>
+                            <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">{item?.discountPercentage}% OFF</span>
                         </div>
-
-                        {/* Body */}
-                        <div className="p-6 space-y-4">
-                            {/* Coupon Code */}
-                            <div className="text-center">
-                                <span className="block text-gray-500 text-sm mb-4">Coupon Code</span>
-                                <span className="text-2xl font-mono font-bold tracking-widest bg-gray-100 px-4 py-2 rounded-md border border-dashed border-gray-400">
-                                    {coupon.code}
-                                </span>
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-gray-700 text-sm">
-                                {coupon.description}
-                            </p>
-
-                            {/* Discount & Type */}
-                            <div className="flex justify-between text-sm">
-                                <span className="font-semibold text-indigo-600">
-                                    Discount: {coupon.discount}
-                                </span>
-                                <span className="text-gray-500">Type: {coupon.type}</span>
-                            </div>
-
-                            {/* Expiry */}
-                            <div className="text-red-500 text-xs">
-                                Expires: {new Date(coupon.expiry).toLocaleDateString()}
-                            </div>
-
-                            {/* Terms */}
-                            <p className="text-xs text-gray-400 italic">
-                                {coupon.terms}
-                            </p>
-                        </div>
-
-                        {/* Footer */}
-                        <div className="bg-gray-50 px-6 py-4 flex justify-center">
-                            <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow">
-                                Redeem Now
-                            </button>
-                        </div>
+                        <p class="text-gray-600 mb-4">{item?.description}</p>
+                       <Link to="/memberDashboard/makePayment"> <button onClick={()=>handleallCuppon(item?.cupponCode)} class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors w-full">
+                            Redeem Now
+                        </button>
+                        </Link>
+                        <span class="absolute -top-3 -right-3 bg-yellow-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">HOT</span>
                     </div>
+                  )
+                }
+                {/* Coupon Card */}
 
-                ))
-            }
+
+                {/* Coupon Card  */}
+                {
+                    newCuppon?.map(item=> <div class="bg-white shadow-lg rounded-xl p-6 transform hover:scale-105 transition-transform duration-300 relative border-t-4 border-green-500">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">{item?.cupponCode}</h3>
+                        <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">{item?.discountPercentage}% OFF</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">{item?.description}</p>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors w-full">
+                        Redeem Now
+                    </button>
+                    <span class="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">NEW</span>
+                </div>)
+                }
+               
+
+                {/*  Coupon Card */}
+                {
+                    trendingCuppon?.map(item=><div class="bg-white shadow-lg rounded-xl p-6 transform hover:scale-105 transition-transform duration-300 relative border-t-4 border-pink-500">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">{item?.cupponCode}</h3>
+                        <span class="bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">{item?.discountPercentage}% OFF</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">{item?.description}</p>
+                    <button class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors w-full">
+                        Redeem Now
+                    </button>
+                    <span class="absolute -top-3 -right-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">TRENDING</span>
+                </div>)
+                }
+                
+            </div>
         </div>
+
     )
 }

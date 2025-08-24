@@ -6,7 +6,7 @@ import useTanStackQuery from '../../../hooks/useTanStackQuery'
 
 export default function CheckOutForm() {
   const stripe = useStripe()
-  const { user, seletMonth } = useAuth()
+  const { user, seletMonth,directCuppon } = useAuth()
 
   console.log(seletMonth)
   const elements = useElements()
@@ -26,10 +26,12 @@ export default function CheckOutForm() {
   const chackCuppon = () => {
     setcuppon(0)
     setcupponMassage('')
-    const findCuppon =  cupponData.find(item => item.code == cupponCode)
+    const findCuppon =  cupponData.find(item => item.cupponCode == cupponCode)
+      console.log(findCuppon)
+
     if (findCuppon) {
-      setcuppon(findCuppon?.discount)
-    setcupponMassage(`Congatulation You Discount${parseInt(findCuppon?.discount)}% `)
+      setcuppon(findCuppon?.discountPercentage)
+    setcupponMassage(`Congatulation You Discount${parseInt(findCuppon?.discountPercentage)}% `)
 
     }
    if (!findCuppon){
@@ -44,7 +46,9 @@ export default function CheckOutForm() {
   const { data } = useTanStackQuery('/agreement', 'agreement')
   const agreementData = data?.find(data => data?.email == user?.email)
   console.log(agreementData)
-  
+    useEffect(()=>{
+      setcupponCode(directCuppon)
+    },[directCuppon])
   
   useEffect(() => {
     if (cuppon) {
@@ -65,12 +69,12 @@ export default function CheckOutForm() {
 
 
   useEffect(() => {
-    axiosSecure.post('/create-payment-intent', { totalPrice })
+   if(totalPrice>0){ axiosSecure.post('/create-payment-intent', {totalPrice})
       .then(res => {
         setClientSecret(res.data.clientSecret)
         console.log(res.data.clientSecret)
       })
-  }, [axiosSecure, totalPrice])
+}}, [axiosSecure, totalPrice])
   const handleSubmit = async (e) => {
 
     if (!stripe || !elements) {
@@ -163,9 +167,18 @@ export default function CheckOutForm() {
         </div>
 
       </form>
+     {
+      directCuppon ===''?<><input type="text" onChange={(e) => setcupponCode(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
+      <button onClick={() => { chackCuppon() }}>Apply</button></>
 
-      <input type="text" onChange={(e) => setcupponCode(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
-      <button onClick={() => { chackCuppon() }}>Apply</button>
+      :
+      <>
+      <input type="text" value={directCuppon}    placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
+      <button onClick={() => { chackCuppon()}}>Apply</button>
+     </>
+     }
+      
+     
       <p>{cupponMassage}</p>
 
       {transationId && <p className='text-green-500 text-left'> <span className='font-semibold text-black'>transationId:</span> {transationId}</p>}

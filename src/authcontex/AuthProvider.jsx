@@ -8,6 +8,7 @@ export default function AuthProvider({ children }) {
   const [user, setuser] = useState(null)
   const [loading, setloading] = useState(true)
   const [seletMonth, setseletMonth] = useState('')
+  const [directCuppon, setDirectCuppon] = useState('')
   const axiosPublick = useAxiosPublick()
   console.log(user)
   const emailSignUp = (email, password) => {
@@ -60,6 +61,8 @@ export default function AuthProvider({ children }) {
     setloading,
     seletMonth,
     setseletMonth,
+    directCuppon,
+     setDirectCuppon,
   }
 
   return (
