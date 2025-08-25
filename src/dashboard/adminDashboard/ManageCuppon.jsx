@@ -1,16 +1,19 @@
 import { useState } from "react"
 import useTanStackQuery from "../../hooks/useTanStackQuery"
 import useAxiosSecure from "../../hooks/useAxiosSecure"
+import Swal from "sweetalert2"
 
 export default function ManageCuppon() {
     const axiosSecure = useAxiosSecure()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [updateModalOpen, setupdateModalOpen] = useState(false)
+    const [updateModalData, setupdateModalData] = useState({})
     const [type, setType] = useState('')
     const [cupponDescription, setCupponDescription] = useState('')
     console.log(cupponDescription)
 
-    const { data,refetch } = useTanStackQuery('/cuppon', 'cuppon')
+    const { data, refetch } = useTanStackQuery('/cuppon', 'cuppon')
     const handleSubmit = (e) => {
         e.preventDefault()
         const form = e.target
@@ -20,17 +23,94 @@ export default function ManageCuppon() {
         console.log({ cupponCode, discountPercentage, type, description })
         const cupponData = { cupponCode, discountPercentage, description, type }
         axiosSecure.post('/cuppon', cupponData)
-            .then(res => console.log(res.data))
+            .then(res => {
+                console.log(res.data)
+                if (res?.data?.acknowledged == true) {
+                    Swal.fire({
+                        title: "Creact Cuppon Successfull",
+                        icon: "success",
+                        draggable: true
+                    })
+                    refetch()
+                }
+            })
     }
 
-        const handleUpdate=async(id)=>{
-            console.log(id)
+    const handleUpdate = async (id) => {
+        console.log(id)
+        const findModalData = data?.find(moda => moda._id == id)
+
+        if (findModalData) {
+            setupdateModalData(findModalData)
+
+            console.log(updateModalData)
+            setupdateModalOpen(true)
         }
-        const handleDelete=async(id)=>{
-           const {data}=await axiosSecure.delete(`/cuppon/${id}`) 
-           console.log(data)
-           refetch()
-        }
+    }
+
+    const handleUpdateFrom = (e) => {
+        //console.log(id)
+        e.preventDefault()
+        const form = e.target
+        const cupponCode = form.couponCode.value
+        const discountPercentage = form.discountPercentage.value
+        const type = form.type.value
+        const description = form.description.value
+        console.log({ cupponCode, discountPercentage, type, description })
+        const cupponData = { cupponCode, discountPercentage, description, type }
+        axiosSecure.patch(`/cuppon/${updateModalData?._id}`, cupponData)
+            .then(res => {
+                console.log(res.data)
+                if (res?.data?.modifiedCount > 0) {
+                    Swal.fire({
+                        title: "Update Successfull",
+                        icon: "success",
+                        draggable: true
+                    })
+                }
+                refetch()
+
+            })
+
+
+
+    }
+    const handleDelete =  (id) => {
+        // const { data } = await axiosSecure.delete(`/cuppon/${id}`)
+        // console.log(data)
+        // if (data?.deletedCount > 0) {
+        //     Swal.fire({
+        //         title: "Delete Cuppon Successfull",
+        //         icon: "success",
+        //         draggable: true
+        //     })
+        // }
+
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then( async(result) => {
+            if (result.isConfirmed) {
+                const { data } = await axiosSecure.delete(`/cuppon/${id}`)
+                console.log(data)
+                if (data?.deletedCount > 0) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                    refetch()
+                }
+            }
+        });
+        refetch()
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
@@ -65,7 +145,6 @@ export default function ManageCuppon() {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {data?.map((coupon) => (
                                 <tr key={coupon.id}>
-                                    {() => setCupponDescription(coupon.description)}
                                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base font-medium text-gray-900">
                                         {coupon.cupponCode}
                                     </td>
@@ -77,8 +156,8 @@ export default function ManageCuppon() {
                                             <button onClick={() => setCupponDescription('')} className="text-red-500">short</button>}
                                     </td>
                                     <td className="flex gap-4 px-4  sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base ">
-                                        {/* <button onClick={()=>handleUpdate(coupon?._id)} className="btn btn-accent">Update</button> */}
-                                        <button onClick={()=>handleDelete(coupon?._id)} className="btn btn-error text-2xl">X</button>
+                                        <button onClick={() => handleUpdate(coupon?._id)} className="btn btn-accent">Update</button>
+                                        <button onClick={() => handleDelete(coupon?._id)} className="btn btn-error text-2xl">X</button>
                                     </td>
                                 </tr>
 
@@ -150,6 +229,85 @@ export default function ManageCuppon() {
                                 <button
                                     className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
                                     onClick={() => setIsModalOpen(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            )}
+
+            {/* update Modal */}
+            {updateModalOpen && (
+                <form onSubmit={handleUpdateFrom}>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
+
+                        <div className="bg-white p-6 rounded-lg w-full max-w-md mx-4 sm:mx-0">
+                            <h2 className="text-xl font-bold mb-4">Add New Coupon</h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Coupon Code
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="couponCode"
+                                        defaultValue={updateModalData.cupponCode}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                        placeholder="Enter coupon code"
+                                    />
+                                </div>
+                                <div className="flex md:gap-5">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Discount Percentage
+                                        </label>
+                                        <input
+                                            type="number"
+                                            defaultValue={updateModalData.discountPercentage}
+                                            name="discountPercentage"
+                                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                            placeholder="Enter discount percentage"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Cuppon Type
+                                        </label>
+                                        <select defaultValue={updateModalData.type} name="type" className="select select-bordered select-xs">
+                                            <option disabled selected>Type</option>
+                                            <option>HOT</option>
+                                            <option>NEW</option>
+                                            <option>TRENDING</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Coupon Description
+                                    </label>
+                                    <textarea
+                                        defaultValue={updateModalData.description}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                        name="description"
+                                        placeholder="Enter coupon description"
+                                        rows="4"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2">
+
+                                <button
+                                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                                    onClick={() => setupdateModalOpen(false)}
                                 >
                                     Cancel
                                 </button>
