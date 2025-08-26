@@ -13,8 +13,9 @@ export default function SignUp() {
         watch,
         formState: { errors },
     } = useForm()
-
+console.log(watch)
     const onSubmit = (data) => {
+    
         emailSignUp(data.email, data.password)
             .then(res => {
                 UserUpdateProfile(data.name, data.photo)
@@ -54,19 +55,31 @@ export default function SignUp() {
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <input type="password" placeholder="password"  {...register('password')} className="input input-bordered" required />
+                    <input type="password" placeholder="password"  {...register('password',{pattern:{
+                        value:/^(?=.*[a-z])(?=.*[A-Z]).+$/,
+                        message:'Must have an Uppercase letter, a lowercase letter'
+
+                    },
+                    minLength:{
+                        value:6,
+                        message:'Password must be at least 6 character'
+                    }
+                        
+                        })} className="input input-bordered" required />
 
                 </div>
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Confarm Password</span>
                     </label>
-                    <input type="password" placeholder="Canfarm Password"  {...register('password')} className="input input-bordered" required />
+                    <input type="password" placeholder="Confarm Password"  {...register('ConfarmPassword',{validate:(value)=>value===watch('password')||'Password do not match'})} className="input input-bordered" required />
 
                 </div>
                 <div className="form-control mt-6">
                     <button className="btn btn-primary">Sign Up</button>
-                </div>
+                    {errors.password&&<p className='text-red-500'>{errors?.password?.message}</p>}
+                    {errors.ConfarmPassword&&<p className='text-red-500'>{errors?.ConfarmPassword?.message}</p>}
+{}                </div>
             </form>
         </div>
     )
