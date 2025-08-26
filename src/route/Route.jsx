@@ -19,6 +19,10 @@ import AdminRoute from "./AdminRoute";
 import MemberRoute from "./MemberRoute";
 import AdminProfile from "../dashboard/adminDashboard/AdminProfile";
 import ManageCuppon from "../dashboard/adminDashboard/ManageCuppon";
+import MakeAnnouncements from "../dashboard/adminDashboard/MakeAnnouncements";
+import UserProfile from "../dashboard/userDashboard/UserProfile";
+import UserAnnouncement from "../dashboard/userDashboard/UserAnnouncement";
+import MemberAnnouncement from "../dashboard/memberDashboard/MemberAnnouncement";
 const router=createBrowserRouter([
     {
         path:'/',
@@ -40,9 +44,20 @@ const router=createBrowserRouter([
                 path:'/apartment',
                 element: <Apartment></Apartment>
             },
+            //userDashboard
             {
                 path:'/userDashboard',
-                element:<PrivectRoute> <UserDashboard></UserDashboard></PrivectRoute>
+                element:<PrivectRoute> <UserDashboard></UserDashboard></PrivectRoute>,
+                children:[
+                    {
+                        path:'/userDashboard/userProfile',
+                        element:<UserProfile></UserProfile>
+                    },
+                    {
+                        path:'/userDashboard/announcement',
+                        element:<UserAnnouncement></UserAnnouncement>
+                    }
+                ]
             },
 
             // AdminDashboard
@@ -65,6 +80,10 @@ const router=createBrowserRouter([
                     {
                         path:'/adminDashboard/manageCuppon',
                         element:<ManageCuppon></ManageCuppon>
+                    },
+                    {
+                        path:'/adminDashboard/makeAnnouncements',
+                        element:<MakeAnnouncements></MakeAnnouncements>
                     }
                 ]
             },
@@ -81,6 +100,10 @@ const router=createBrowserRouter([
                     {
                         path:'/memberDashboard/payment',
                         element:<Payment></Payment>
+                    },
+                    {
+                        path:'/memberDashboard/announcement',
+                        element:<MemberAnnouncement></MemberAnnouncement>
                     },
                     {
                         path:'/memberDashboard/makePayment',
