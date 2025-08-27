@@ -1,12 +1,64 @@
-# React + Vite
+Skyline Residency - Building Management System 🏢
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured Building Management System (BMS) for managing apartments, agreements, payments, and announcements in a single building.
 
-Currently, two official plugins are available:
+👥 User Roles
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+• Admin: Full control over members, agreements, coupons, and announcements.
 
-## Expanding the ESLint configuration
+• Member: Can view their apartment, make payments, and access announcements.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+• User: Can browse apartments, apply for agreements, and view announcements.
+
+🏠 Main Features
+
+• Responsive design for mobile, tablet, and desktop.
+
+• Authentication: Email/password & Google login.
+
+• Apartment Management: View apartments, agreements, and status updates.
+
+• Payment System: Make payments with optional coupon discounts.
+
+• Announcements: Real-time announcements from the admin/owner.
+
+• Dashboard: Role-based dashboard for Admin, Member, and User.
+
+• Sweet Alerts/Toasts: For all CRUD operations and authentication events.
+
+• JWT Authentication: Token-based secure access stored in localStorage.
+
+• Pagination & Search: Browse apartments efficiently.
+
+🛠️ Tech Stack
+
+• Frontend: JavaScript, React, Tailwind CSS, TanStack Query
+
+• Backend: Node.js, Express.js, MongoDB
+
+• Auth & Hosting: Firebase
+
+• Security: JWT (JSON Web Token)
+
+• Notifications: SweetAlert2 
+
+🔐 Test Credentials
+
+• Admin: admin@gmail.com
+ Password: 123456
+
+• Member: member@gmail.com
+ / 123456
+
+• User: user@gmail.com
+ / 123456
+
+🌐 Live Site
+
+• [Skyline Residency Live](https://skyline-residency.web.app)
+
+📂 Repositories
+
+• Frontend: [Client GitHub Repo](https://github.com/RejwanulIslam/skyline-residency-client)
+
+• Backend: [Server GitHub Repo](https://github.com/RejwanulIslam/skyline-residency-server)
