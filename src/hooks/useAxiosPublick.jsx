@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function useAxiosPublick() {
     const axiosPublick = axios.create({
-        baseURL:'http://localhost:5000'
+        baseURL:'https://skyline-residency-server.vercel.app'
     }) 
   return axiosPublick;
 }

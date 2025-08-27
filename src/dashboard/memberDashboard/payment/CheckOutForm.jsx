@@ -3,11 +3,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import useAxiosSecure from '../../../hooks/useAxiosSecure'
 import useAuth from '../../../hooks/useAuth'
 import useTanStackQuery from '../../../hooks/useTanStackQuery'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 export default function CheckOutForm() {
   const stripe = useStripe()
   const { user, seletMonth,directCuppon } = useAuth()
-
+    const navigate=useNavigate()
   console.log(seletMonth)
   const elements = useElements()
   const axiosSecure = useAxiosSecure()
@@ -129,6 +131,12 @@ export default function CheckOutForm() {
         console.log(paymentData)
         const { data } = await axiosSecure.post('/paymentHistory', paymentData)
         console.log(data)
+             Swal.fire({
+                  title: "Payment Successfull",
+                  icon: "success",
+                  draggable: true
+                })
+                navigate('/memberDashboard/paymentHistory')
       }
     }
 
@@ -168,14 +176,14 @@ export default function CheckOutForm() {
 
       </form>
      {
-      directCuppon ===''?<><input type="text" onChange={(e) => setcupponCode(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
-      <button onClick={() => { chackCuppon() }}>Apply</button></>
+      directCuppon ===''?<div className='flex'><input type="text" onChange={(e) => setcupponCode(e.target.value)} placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
+      <button className='btn btn-sm bg-green-500' onClick={() => { chackCuppon() }}>Apply</button></div>
 
       :
-      <>
+      <div className='flex'>
       <input type="text" value={directCuppon}    placeholder="Type here" className="input input-bordered input-xs w-full max-w-xs flex text-left" />
-      <button onClick={() => { chackCuppon()}}>Apply</button>
-     </>
+      <button className='btn btn-sm bg-green-500' onClick={() => { chackCuppon()}}>Apply</button>
+     </div>
      }
       
      

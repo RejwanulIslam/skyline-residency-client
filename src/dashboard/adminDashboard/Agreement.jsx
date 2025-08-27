@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import useAxiosSecure from '../../hooks/useAxiosSecure'
 import useTanStackQuery from '../../hooks/useTanStackQuery'
 export default function Agreement() {
@@ -7,6 +8,13 @@ export default function Agreement() {
     const acceptAgreement = async (user) => {
         console.log(user)
         const { data } = await axiosSecure.patch(`/user?useremail=${user?.email}&agreementId=${user?._id}`)
+           if (data?.result?.modifiedCount > 0) {
+                   Swal.fire({
+                       title: "Agreement Accept",
+                       icon: "success",
+                       draggable: true
+                   })
+               }
         refetch()
         console.log(data)
 

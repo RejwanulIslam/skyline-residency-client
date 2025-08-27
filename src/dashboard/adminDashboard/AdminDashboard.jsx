@@ -1,9 +1,22 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import useTanStackQuery from "../../hooks/useTanStackQuery";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
-    const user=useTanStackQuery('/user','user')
+    const [announcement, setannouncement] = useState([])
+    const axiosSecure = useAxiosSecure()
+    const { data } = useTanStackQuery('/user', 'user')
+    const member = data.filter(item => item.role == 'member')
+    const { data: agreements } = useTanStackQuery('/agreement', 'agreement')
+    const { data: cuppon } = useTanStackQuery('/cuppon', 'cuppon')
+    const pendingAgreements = agreements?.filter(item => item.status == 'pending')
+    useEffect(() => {
+        axiosSecure.get('/announcement')
+            .then(res => { setannouncement(res.data) })
+    }, [])
     const location = useLocation()
+
     console.log(location)
     return (
         <div>
@@ -11,11 +24,11 @@ export default function AdminDashboard() {
                 {/* Sidebar */}
                 <div className="w-64  bg-white shadow-sm p-4 space-y-2">
                     <nav className="space-y-2">
-                        <NavLink  to="/adminDashboard/adminProfile" className={ ({isActive})=> `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive?"bg-indigo-500 text-white hover:text-gray-800":"bg-indigo-100 text-gray-800"}`}>👤 Admin Profile</NavLink>
-                        <NavLink to="/adminDashboard/manageMembers" className={ ({isActive})=> `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive?"bg-indigo-500 text-white  hover:text-gray-800":"bg-indigo-100 text-gray-800"}`}>👥 Manage Members</NavLink>
-                        <NavLink to="/adminDashboard/makeAnnouncements" className={ ({isActive})=> `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive?"bg-indigo-500 text-white hover:text-gray-800":"bg-indigo-100 text-gray-800"}`}>📢 Make Announcement</NavLink>
-                        <NavLink to="/adminDashboard/agreement" className={ ({isActive})=> `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive?"bg-indigo-500 text-white hover:text-gray-800":"bg-indigo-100 text-gray-800"}`}>📄 Agreement Requests</NavLink>
-                        <NavLink to="/adminDashboard/manageCuppon" className={ ({isActive})=> `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive?"bg-indigo-500 text-white hover:text-gray-800":"bg-indigo-100 text-gray-800"}`}>🎟️ Manage Coupons</NavLink>
+                        <NavLink to="/adminDashboard/adminProfile" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive ? "bg-indigo-500 text-white hover:text-gray-800" : "bg-indigo-100 text-gray-800"}`}>👤 Admin Profile</NavLink>
+                        <NavLink to="/adminDashboard/manageMembers" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive ? "bg-indigo-500 text-white  hover:text-gray-800" : "bg-indigo-100 text-gray-800"}`}>👥 Manage Members</NavLink>
+                        <NavLink to="/adminDashboard/makeAnnouncements" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive ? "bg-indigo-500 text-white hover:text-gray-800" : "bg-indigo-100 text-gray-800"}`}>📢 Make Announcement</NavLink>
+                        <NavLink to="/adminDashboard/agreement" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive ? "bg-indigo-500 text-white hover:text-gray-800" : "bg-indigo-100 text-gray-800"}`}>📄 Agreement Requests</NavLink>
+                        <NavLink to="/adminDashboard/manageCuppon" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-md hover:bg-gray-50 font-medium  ${isActive ? "bg-indigo-500 text-white hover:text-gray-800" : "bg-indigo-100 text-gray-800"}`}>🎟️ Manage Coupons</NavLink>
                     </nav>
                 </div>
 
@@ -27,17 +40,17 @@ export default function AdminDashboard() {
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div className="p-4 bg-indigo-50 rounded-lg">
                                     <h2 className="text-lg font-semibold">Active Members</h2>
-                                    <p className="text-2xl font-bold mt-2">1,243</p>
+                                    <p className="text-2xl font-bold mt-2">{member?.length}</p>
                                     <p className="text-sm text-gray-500 mt-1">Members currently active in the system</p>
                                 </div>
                                 <div className="p-4 bg-yellow-50 rounded-lg">
                                     <h2 className="text-lg font-semibold">Pending Agreements</h2>
-                                    <p className="text-2xl font-bold mt-2">8</p>
+                                    <p className="text-2xl font-bold mt-2">{pendingAgreements?.length}</p>
                                     <p className="text-sm text-gray-500 mt-1">Awaiting admin approval</p>
                                 </div>
                                 <div className="p-4 bg-pink-50 rounded-lg">
                                     <h2 className="text-lg font-semibold">Active Coupons</h2>
-                                    <p className="text-2xl font-bold mt-2">12</p>
+                                    <p className="text-2xl font-bold mt-2">{cuppon?.length}</p>
                                     <p className="text-sm text-gray-500 mt-1">Currently valid for use</p>
                                 </div>
                             </div>
@@ -45,12 +58,12 @@ export default function AdminDashboard() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="p-4 bg-blue-50 rounded-lg">
                                     <h2 className="text-lg font-semibold">Total Announcements</h2>
-                                    <p className="text-2xl font-bold mt-2">34</p>
+                                    <p className="text-2xl font-bold mt-2">{announcement?.length}</p>
                                     <p className="text-sm text-gray-500 mt-1">All announcements made to members</p>
                                 </div>
                                 <div className="p-4 bg-green-50 rounded-lg">
-                                    <h2 className="text-lg font-semibold">Total Members</h2>
-                                    <p className="text-2xl font-bold mt-2">1,500</p>
+                                    <h2 className="text-lg font-semibold">Total User</h2>
+                                    <p className="text-2xl font-bold mt-2">{data?.length}</p>
                                     <p className="text-sm text-gray-500 mt-1">Including active and inactive members</p>
                                 </div>
                             </div>

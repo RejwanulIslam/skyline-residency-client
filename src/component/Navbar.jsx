@@ -30,7 +30,7 @@ export default function Navbar() {
                     </div>
                     <div className='flex items-center'>
                         <img className='h-16 w-16' src="/logo.png"></img>
-                        <h2 className='text-xl font-bold'>MY BUILDING</h2>
+                        <h2 className='text-xl font-bold'>SKYLINE RESIDENCY</h2>
                     </div>
                 </div>
                 <div className="navbar-center hidden lg:flex">

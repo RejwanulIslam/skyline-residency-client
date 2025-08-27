@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form"
 import useAuth from "../hooks/useAuth"
 import { useLocation, useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
 
 export default function Login() {
-    const {emailLogin}=useAuth()
-    const location=useLocation()
-    const navigate=useNavigate()
-    const from=location?.state?.from?.pathname
-            console.log(from)
+    const { emailLogin } = useAuth()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location?.state?.from?.pathname || '/'
+    console.log(from)
 
     const {
         register,
@@ -18,11 +19,18 @@ export default function Login() {
 
     const onSubmit = (data) => {
         emailLogin(data.email, data.password)
-        .then(res=>{
-            console.log(res?.data)
-            navigate(from,{replace:true})
-        })
-          
+            .then(res => {
+                if (res?.user) {
+                    Swal.fire({
+                        title: "Login Successfull!",
+                        icon: "success",
+                        draggable: true
+                    });
+                    navigate(from, { replace: true })
+                }
+
+            })
+
     }
 
     return (

@@ -4,6 +4,7 @@ import useAxiosSecure from '../hooks/useAxiosSecure'
 import useTanStackQuery from '../hooks/useTanStackQuery'
 import useAxiosPublick from '../hooks/useAxiosPublick'
 import { useQuery } from '@tanstack/react-query'
+import Swal from 'sweetalert2'
 
 export default function Apartment() {
   const axiosSecure = useAxiosSecure()
@@ -12,9 +13,12 @@ export default function Apartment() {
 
   //pagination
   const [count, setcount] = useState(0)
+  const [minRent, setMinRent] = useState('')
+  const [maxRent, setMaxRent] = useState('')
   const [loading, setloading] = useState(false)
   const [currentpage, setcurrentpage] = useState(0)
   const [itemPerPage, setitemPerPage] = useState(6)
+  const [allData, setAllData] = useState([])
   const { data: apartmentCount } = useTanStackQuery('/apartmentCount', 'apartmentCount')
   useEffect(() => {
     if (apartmentCount) {
@@ -30,14 +34,22 @@ export default function Apartment() {
 
 
 
+
   const { data, isLoading } = useQuery({
-    queryKey: ['apartment',currentpage,itemPerPage],
+    queryKey: ['apartment', currentpage, itemPerPage, minRent, maxRent],
     queryFn: async () => {
-      const { data } = await axiosPublick.get(`/apartment?page=${currentpage}&size=${itemPerPage}`)
+      const { data } = await axiosPublick.get(`/apartment?page=${currentpage}&size=${itemPerPage}&minRent=${minRent}&maxRent=${maxRent}`)
+
       return data
 
     }
   })
+  // useEffect(()=>{
+  //   if(data){
+  //   setAllData(data)
+
+  //   }
+  // },[data])
 
   const handleItemPerPage = (num) => {
     setitemPerPage(num)
@@ -68,11 +80,79 @@ export default function Apartment() {
       status: 'pending'
     }
     console.log(agreementInfo)
-    const { data } = await axiosSecure.post('/agreement', agreementInfo)
-    console.log(data)
+    if (user) {
+      const { data } = await axiosSecure.post('/agreement', agreementInfo)
+      console.log(data)
+      if (data?.acknowledged) {
+        Swal.fire({
+          title: "Agreement request Successfull",
+          icon: "success",
+          draggable: true
+        })
+      }
+    }
+
   }
+
+  // search
+  // const handleSearch = async () => {
+  //   const { data } = await axiosPublick.get(`/apartment?minRent=${minRent}&maxRent=${maxRent}`)
+  //   console.log(data)
+  //   setAllData(data)
+  // }
+  console.log(minRent, maxRent)
+
   return (
     <div>
+      <div className="p-6 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          {/* Search Card */}
+          <div className="bg-white p-6 rounded-2xl shadow-md">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Search Apartments by Rent
+            </h2>
+
+            <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-4 sm:space-y-0">
+              {/* Min Rent */}
+              <div className="flex-1">
+                <label className="block text-gray-700 font-medium mb-1">
+                  Min Rent (TK)
+                </label>
+                <input
+                  type="number"
+                  placeholder="1000"
+                  value={minRent}
+                  onChange={(e) => setMinRent(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              {/* Max Rent */}
+              <div className="flex-1">
+                <label className="block text-gray-700 font-medium mb-1">
+                  Max Rent (TK)
+                </label>
+                <input
+                  type="number"
+                  placeholder="2000"
+                  value={maxRent}
+                  onChange={(e) => setMaxRent(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              {/* Search Button */}
+              <div>
+                {/* <button  className="w-full sm:w-auto bg-indigo-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition">
+                  Search
+                </button> */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <div className='grid lg:grid-cols-2 gap-5 '>
         {
           isLoading ? <p>loading</p> : data?.map(apartment => (<div key={apartment?._id} className="bg-white shadow-lg rounded-lg overflow-hidden">

@@ -4,20 +4,24 @@ import { useState } from 'react'
 import useAxiosPublick from './useAxiosPublick'
 
 export default function userRole() {
-    const { user} = useAuth()
-    const [roalLoading,setroalLoading]=useState(true)
-    const [role,setrole]=useState({})
+    const { user } = useAuth()
+    const [roalLoading, setroalLoading] = useState(true)
+    const [role, setrole] = useState({})
     const axiosPublick = useAxiosPublick()
+    console.log(role)
     useEffect(() => {
-        axiosPublick.get(`/user/${user?.email}`)
+        if(!user?.email)return
+        setroalLoading(true)
+        console.log(user?.email)
+        axiosPublick.get(`/userRole?email=${user?.email}`)
             .then(res => {
                 console.log(res.data)
                 setrole(res.data)
             })
-           .finally(()=>{
-            setroalLoading(false)
-           })
+            .finally(() => {
+                setroalLoading(false)
+            })
     }, [user?.email])
-
-    return {role,roalLoading};
+ 
+    return { role, roalLoading };
 }

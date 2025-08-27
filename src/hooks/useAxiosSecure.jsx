@@ -2,7 +2,7 @@ import axios from "axios"
 import useAuth from ".//useAuth"
 import { useNavigate } from "react-router-dom"
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: 'https://skyline-residency-server.vercel.app'
 })
 export default function useAxiosSecure() {
     const { signOutUser, loading } = useAuth()

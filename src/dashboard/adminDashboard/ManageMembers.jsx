@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import useAxiosSecure from '../../hooks/useAxiosSecure'
 import useTanStackQuery from '../../hooks/useTanStackQuery'
 
@@ -10,7 +11,15 @@ export default function ManageMembers() {
     const removeMember = async (email) => {
         console.log(email)
         const { data } = await axiosSecure.patch(`/user?removeMember=${email}`)
+
         console.log(data)
+        if (data?.result?.modifiedCount > 0) {
+            Swal.fire({
+                title: "Remove Member Successfull",
+                icon: "success",
+                draggable: true
+            })
+        }
         refetch()
     }
     return (
