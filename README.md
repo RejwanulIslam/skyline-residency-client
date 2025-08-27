@@ -45,13 +45,13 @@ A full-featured Building Management System (BMS) for managing apartments, agreem
 🔐 Test Credentials
 
 • Admin: admin@gmail.com
- Password: 123456
+ /Password: 123456
 
 • Member: member@gmail.com
- / 123456
+ /Password: 123456
 
 • User: user@gmail.com
- / 123456
+ /Password: 123456
 
 🌐 Live Site
 
