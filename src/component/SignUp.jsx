@@ -69,11 +69,11 @@ export default function SignUp() {
                         <span className="label-text">Password</span>
                     </label>
                     <input type="password" placeholder="password"  {...register('password', {
-                        // pattern: {
-                        //     value: /^(?=.*[a-z])(?=.*[A-Z]).+$/,
-                        //     message: 'Must have an Uppercase letter, a lowercase letter'
+                        pattern: {
+                            value: /^(?=.*[a-z])(?=.*[A-Z]).+$/,
+                            message: 'Must have an Uppercase letter, a lowercase letter'
 
-                        // },
+                        },
                         minLength: {
                             value: 6,
                             message: 'Password must be at least 6 character'

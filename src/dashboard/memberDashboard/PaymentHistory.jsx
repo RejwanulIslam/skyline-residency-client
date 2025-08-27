@@ -1,9 +1,12 @@
 import React from 'react'
 import useTanStackQuery from '../../hooks/useTanStackQuery'
+import useAuth from '../../hooks/useAuth'
 
 export default function PaymentHistory() {
+    const { user } = useAuth()
     const { data } = useTanStackQuery('/paymentHistory', 'paymentHistory')
     console.log(data)
+    const history = data ?. filter(item => item.user_Email == user?.email);
     return (
 
         <div className="p-6 bg-gray-50 min-h-screen overflow-x-hidden">
@@ -27,20 +30,20 @@ export default function PaymentHistory() {
                     </thead>
                     <tbody>
                         {
-                            data?.map(item=>  <tr className="hover:bg-gray-50">
-                            <td className="p-3 border-b">{item?.apartment_No}</td>
-                            <td className="p-3 border-b">{item?.block_Name}</td>
-                            <td className="p-3 border-b">{item?.floor_No}</td>
-                            <td className="p-3 border-b">{item?.month}</td>
-                            <td className="p-3 border-b">{item?.rent}</td>
-                            <td className="p-3 border-b">{item?.transation_Id}</td>
-                            <td className="p-3 border-b">{item?.user_Email}</td>
-                            <td className="p-3 border-b">{item?.date}</td>
-                        </tr>)
+                            history?.map(item => <tr className="hover:bg-gray-50">
+                                <td className="p-3 border-b">{item?.apartment_No}</td>
+                                <td className="p-3 border-b">{item?.block_Name}</td>
+                                <td className="p-3 border-b">{item?.floor_No}</td>
+                                <td className="p-3 border-b">{item?.month}</td>
+                                <td className="p-3 border-b">{item?.rent}</td>
+                                <td className="p-3 border-b">{item?.transation_Id}</td>
+                                <td className="p-3 border-b">{item?.user_Email}</td>
+                                <td className="p-3 border-b">{item?.date}</td>
+                            </tr>)
                         }
-                      
 
-                
+
+
                     </tbody>
                 </table>
             </div>
