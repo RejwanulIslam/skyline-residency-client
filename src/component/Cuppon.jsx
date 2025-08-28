@@ -47,9 +47,9 @@ export default function Cuppon() {
                         <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">{item?.discountPercentage}% OFF</span>
                     </div>
                     <p class="text-gray-600 mb-4">{item?.description}</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors w-full">
+                  <Link to="/memberDashboard/makePayment">  <button  onClick={()=>handleallCuppon(item?.cupponCode)} class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors w-full">
                         Redeem Now
-                    </button>
+                    </button></Link>
                     <span class="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">NEW</span>
                 </div>)
                 }
@@ -63,9 +63,9 @@ export default function Cuppon() {
                         <span class="bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">{item?.discountPercentage}% OFF</span>
                     </div>
                     <p class="text-gray-600 mb-4">{item?.description}</p>
-                    <button class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors w-full">
+                   <Link  to="/memberDashboard/makePayment"> <button  onClick={()=>handleallCuppon(item?.cupponCode)} class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors w-full">
                         Redeem Now
-                    </button>
+                    </button></Link>
                     <span class="absolute -top-3 -right-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">TRENDING</span>
                 </div>)
                 }

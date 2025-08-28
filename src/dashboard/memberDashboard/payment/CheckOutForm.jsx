@@ -187,7 +187,7 @@ export default function CheckOutForm() {
      }
       
      
-      <p>{cupponMassage}</p>
+    {cupponMassage!=='Your Cuppon is Invalid'? <p className='text-start text-green-500'>{cupponMassage}</p>:<p className='text-start text-red-500'>{cupponMassage}</p>}
 
       {transationId && <p className='text-green-500 text-left'> <span className='font-semibold text-black'>transationId:</span> {transationId}</p>}
       <p className='text-red-500 text-left'>{error}</p>

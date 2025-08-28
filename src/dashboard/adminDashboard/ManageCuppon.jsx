@@ -11,6 +11,7 @@ export default function ManageCuppon() {
     const [updateModalData, setupdateModalData] = useState({})
     const [type, setType] = useState('')
     const [cupponDescription, setCupponDescription] = useState('')
+    const [expandedCuppon, setExpandedCuppon] = useState(null)
     console.log(cupponDescription)
 
     const { data, refetch } = useTanStackQuery('/cuppon', 'cuppon')
@@ -152,8 +153,14 @@ export default function ManageCuppon() {
                                         {coupon.discountPercentage}%
                                     </td>
                                     <td className="px-4  sm:px-6 py-4  text-sm sm:text-base text-gray-500">
-                                        {(coupon.description).slice(0, 31)}{(cupponDescription).slice(31)}  {cupponDescription == '' ? <button onClick={() => setCupponDescription(coupon.description)} className="text-red-500">read...</button> :
-                                            <button onClick={() => setCupponDescription('')} className="text-red-500">short</button>}
+
+                                        {
+                                            expandedCuppon===coupon?._id?coupon.description:coupon.description.slice(0, 25)
+                                        } 
+                                        {
+                                            expandedCuppon===coupon?._id?<button className="text-green-400" onClick={()=>setExpandedCuppon(null)}>...Short</button>:<button className="text-green-400" onClick={(()=>setExpandedCuppon(coupon?._id))}>Read...</button>
+                                        }
+
                                     </td>
                                     <td className="flex gap-4 px-4  sm:px-6 py-4 whitespace-nowrap text-sm sm:text-base ">
                                         <button onClick={() => handleUpdate(coupon?._id)} className="btn btn-accent">Update</button>
